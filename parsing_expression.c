@@ -256,6 +256,61 @@ void inToPre() {
     printf("Prefix = %s\n", prefix);
 }
 
+void preToIn() {
+    char prefix[MAX], infix[MAX];
+    char temp[MAX];
+    int i;
+
+    printf("Masukkan ekspresi prefix: ");
+    fgets(prefix, MAX, stdin);
+    prefix[strcspn(prefix, "\n")] = '\0';  // Menghapus newline di akhir input
+
+    reverse_string(prefix);  // Balikkan ekspresi Prefix agar diproses dari belakang
+
+    for (i = 0; prefix[i] != '\0'; i++) {
+        char c = prefix[i];
+
+        if (isOperand(c)) {
+            char operand[2] = {c, '\0'};
+            pushStr(operand);
+        } else {
+            if (top < 1) {
+                printf("Error: Format prefix salah\n");
+                return;
+            }
+
+            char op1[MAX], op2[MAX];
+            strcpy(op1, popStr());
+            strcpy(op2, popStr());
+
+            snprintf(temp, MAX, "(%s %c %s)", op1, c, op2);
+            pushStr(temp);
+        }
+    }
+
+    if (top == 0) {
+        strcpy(infix, popStr());
+        printf("Infix = %s\n", infix);
+    } else {
+        printf("Error: Format prefix tidak valid\n");
+    }
+}
+
+int space(char c) {
+    return (c == ' ' || c == '\t');
+}
+
+int precedence(char symbol) {
+    switch (symbol) {
+        case '^': return 3;
+        case '/':
+        case '*': return 2;
+        case '+':
+        case '-': return 1;
+        default: return 0;
+    }
+}
+
 void pushStr(char *str) {
     if (top < MAX - 1) {
         top++;
