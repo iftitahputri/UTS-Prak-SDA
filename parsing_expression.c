@@ -296,21 +296,6 @@ void preToIn() {
     }
 }
 
-int space(char c) {
-    return (c == ' ' || c == '\t');
-}
-
-int precedence(char symbol) {
-    switch (symbol) {
-        case '^': return 3;
-        case '/':
-        case '*': return 2;
-        case '+':
-        case '-': return 1;
-        default: return 0;
-    }
-}
-
 void pushStr(char *str) {
     if (top < MAX - 1) {
         top++;
@@ -360,6 +345,18 @@ int isOperand(char symbol) {
 
 int isOperator(char symbol) {
     return (symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/' || symbol == '^');
+}
+
+void reverse_string(char *str) {
+    int length = strlen(str);
+    int start = 0, end = length - 1;
+    while (start < end) {
+        char temp = str[start];
+        str[start] = str[end];
+        str[end] = temp;
+        start++;
+        end--;
+    }
 }
 
 
