@@ -106,6 +106,40 @@ void inToPost() {
     printf("Postfix = %s\n", postfix);
 }
 
+void postToIn() {
+    char postfix[MAX], symbol, op1[MAX], op2[MAX], temp[MAX];
+    int i;
+    top = -1;
+    
+    printf("Masukkan ekspresi postfix: ");
+    fgets(postfix, MAX, stdin);
+    if (postfix[strlen(postfix) - 1] == '\n')
+        postfix[strlen(postfix) - 1] = '\0';
+
+    for (i = 0; i < strlen(postfix); i++) {
+        symbol = postfix[i];
+        if (symbol == ' ') continue;
+        if (isOperand(symbol)) {
+            char operandStr[2] = {symbol, '\0'};
+            pushStr(operandStr);
+        } else if (isOperator(symbol)) {
+            if (top < 1) {
+                printf("Error: Format postfix salah\n");
+                return;
+            }
+            strcpy(op2, popStr());
+            strcpy(op1, popStr());
+            snprintf(temp, MAX, "(%s %c %s)", op1, symbol, op2);
+            pushStr(temp);
+        }
+    }
+    if (top == 0) {
+        printf("Infix = %s\n", popStr());
+    } else {
+        printf("Error: Format postfix tidak valid\n");
+    }
+}
+
 char *postToPre(char *post_exp) {
     static char result[MAX];
     char symbol, op1[MAX], op2[MAX], temp[MAX];
