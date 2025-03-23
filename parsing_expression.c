@@ -8,8 +8,11 @@ char stack[MAX][MAX];
 int top = -1;
 
 void inToPost();
+void postToIn();
 char *postToPre(char *);
 void preToPost();
+void inToPre();
+void preToIn();
 
 void pushStr(char *);
 char *popStr();
@@ -19,8 +22,49 @@ int precedence(char);
 int space(char);
 int isOperator(char);
 int isOperand(char);
+void reverse_string(char *);
 
 int main (){
+    int choice;
+    char postfix[MAX], infix[MAX], prefix[MAX], result[MAX];
+    
+    printf("Pilih opsi:\n");
+    printf("1. Infix ke Postfix\n");
+    printf("2. Postfix ke Infix\n");
+    printf("3. Postfix ke Prefix\n");
+    printf("4. Prefix ke Postfix\n");
+    printf("5. Infix ke Prefix\n");
+    printf("6. Prefix ke Infix\n");
+    printf("Pilihan: ");
+    scanf("%d", &choice);
+    getchar(); // Membersihkan buffer newline
+
+    switch (choice){
+    case 1:
+        inToPost();
+        break;
+    case 2:
+        postToIn();
+        break;
+    case 3: 
+        printf("Masukkan ekspresi postfix: ");
+        fgets(postfix, MAX, stdin);
+        if (postfix[strlen(postfix) - 1] == '\n')
+            postfix[strlen(postfix) - 1] = '\0';
+        printf("Prefix = %s\n", postToPre(postfix));
+        break;
+    case 4:
+        preToPost();
+        break;
+    case 5:
+        inToPre();
+        break;
+    case 6:
+        preToIn();
+        break;
+    default:
+        printf ("Tidak valid");
+    }
 
     return 0;
 }
