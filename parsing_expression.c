@@ -27,7 +27,8 @@ void reverse_string(char *);
 int main (){
     int choice;
     char postfix[MAX];
-    
+
+    while (1){
     printf ("+=========================================+\n");
     printf("|\t    Choose the Convertion:      \t|\n");
     printf("|=========================================|");
@@ -52,7 +53,7 @@ int main (){
         postToIn();
         break;
     case 3: 
-        printf("Masukkan ekspresi postfix: ");
+        printf("Enter the Postfix Expression: ");
         fgets(postfix, MAX, stdin);
         if (postfix[strlen(postfix) - 1] == '\n')
             postfix[strlen(postfix) - 1] = '\0';
@@ -67,10 +68,12 @@ int main (){
     case 6:
         preToIn();
         break;
+    case 7:
+        exit(1);
     default:
-        printf ("Tidak valid");
+        printf ("Invalid Choice!");
     }
-
+    }
     return 0;
 }
 
@@ -79,7 +82,7 @@ void inToPost() {
     int i, j = 0;
     top = -1;
     
-    printf("Masukkan ekspresi infix: ");
+    printf("Enter the infix Expression: ");
     fgets(infix, MAX, stdin);
     if (infix[strlen(infix) - 1] == '\n') 
         infix[strlen(infix) - 1] = '\0';
@@ -116,7 +119,7 @@ void postToIn() {
     int i;
     top = -1;
     
-    printf("Masukkan ekspresi postfix: ");
+    printf("Enter the Postfix Expression: ");
     fgets(postfix, MAX, stdin);
     if (postfix[strlen(postfix) - 1] == '\n')
         postfix[strlen(postfix) - 1] = '\0';
@@ -141,7 +144,7 @@ void postToIn() {
     if (top == 0) {
         printf("Infix = %s\n", popStr());
     } else {
-        printf("Error: Format postfix tidak valid\n");
+        printf("Error: Invalid postfix format!\n");
     }
 }
 
@@ -158,7 +161,7 @@ char *postToPre(char *post_exp) {
             pushStr(operand);
         } else if (isOperator(symbol)) {
             if (top < 1) {
-                printf("Error: Format postfix salah\n");
+                printf("Error: Invalid postfix format!\n");
                 exit(1);
             }
             strcpy(op1, popStr());
@@ -171,7 +174,7 @@ char *postToPre(char *post_exp) {
         strcpy(result, popStr());
         return result;
     } else {
-        printf("Error: Format postfix tidak valid\n");
+        printf("Error: Invalid postfix format!\n");
         exit(1);
     }
 }
@@ -208,7 +211,7 @@ void inToPre() {
     char temp[MAX];
     int i, j = 0;
 
-    printf("Masukkan ekspresi infix: ");
+    printf("Enter the Infix Expression: ");
     fgets(infix, MAX, stdin);
     if (infix[strlen(infix) - 1] == '\n')
         infix[strlen(infix) - 1] = '\0';
@@ -266,7 +269,7 @@ void preToIn() {
     char temp[MAX];
     int i;
 
-    printf("Masukkan ekspresi prefix: ");
+    printf("Enter the Prefix Expression: ");
     fgets(prefix, MAX, stdin);
     prefix[strcspn(prefix, "\n")] = '\0';  // Menghapus newline di akhir input
 
@@ -280,7 +283,7 @@ void preToIn() {
             pushStr(operand);
         } else {
             if (top < 1) {
-                printf("Error: Format prefix salah\n");
+                printf("Error: Invalid prefix format!\n");
                 return;
             }
 
@@ -297,7 +300,7 @@ void preToIn() {
         strcpy(infix, popStr());
         printf("Infix = %s\n", infix);
     } else {
-        printf("Error: Format prefix tidak valid\n");
+        printf("Error: Invalid prefix format!\n");
     }
 }
 
