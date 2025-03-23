@@ -8,6 +8,8 @@ char stack[MAX][MAX];
 int top = -1;
 
 void inToPost();
+char *postToPre(char *);
+void preToPost();
 
 void pushStr(char *);
 char *popStr();
@@ -58,6 +60,64 @@ void inToPost() {
     }
     postfix[j] = '\0';
     printf("Postfix = %s\n", postfix);
+}
+
+char *postToPre(char *post_exp) {
+    static char result[MAX];
+    char symbol, op1[MAX], op2[MAX], temp[MAX];
+    int i;
+    top = -1;
+    
+    for (i = 0; i < strlen(post_exp); i++) {
+        symbol = post_exp[i];
+        if (isOperand(symbol)) {
+            char operand[2] = {symbol, '\0'};
+            pushStr(operand);
+        } else if (isOperator(symbol)) {
+            if (top < 1) {
+                printf("Error: Format postfix salah\n");
+                exit(1);
+            }
+            strcpy(op1, popStr());
+            strcpy(op2, popStr());
+            snprintf(temp, MAX, "%c%s%s", symbol, op2, op1);
+            pushStr(temp);
+        }
+    }
+    if (top == 0) {
+        strcpy(result, popStr());
+        return result;
+    } else {
+        printf("Error: Format postfix tidak valid\n");
+        exit(1);
+    }
+}
+
+void preToPost() {
+    char prefix[MAX], temp[MAX];
+    printf("Enter Prefix expression: ");
+    fgets(prefix, MAX, stdin);
+    if (prefix[strlen(prefix) - 1] == '\n')
+        prefix[strlen(prefix) - 1] = '\0';
+
+    int len = strlen(prefix);
+
+    for (int i = len - 1; i >= 0; i--) { 
+        if (isOperator(prefix[i])) {  
+            char op1[MAX], op2[MAX], newExpr[MAX];
+
+            strcpy(op1, popStr());
+            strcpy(op2, popStr());
+
+            snprintf(newExpr, MAX, "%s %s %c", op1, op2, prefix[i]);
+            pushStr(newExpr);
+        } else {  
+            snprintf(temp, MAX, "%c", prefix[i]);
+            pushStr(temp);
+        }
+    }
+
+    printf("Postfix = %s\n", popStr());
 }
 
 void pushStr(char *str) {
