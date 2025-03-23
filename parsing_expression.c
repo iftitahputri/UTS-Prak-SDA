@@ -198,6 +198,64 @@ void preToPost() {
     printf("Postfix = %s\n", popStr());
 }
 
+void inToPre() {
+    char infix[MAX], reversedInfix[MAX], reversedPrefix[MAX], prefix[MAX];
+    char temp[MAX];
+    int i, j = 0;
+
+    printf("Masukkan ekspresi infix: ");
+    fgets(infix, MAX, stdin);
+    if (infix[strlen(infix) - 1] == '\n')
+        infix[strlen(infix) - 1] = '\0';
+
+    // 1. Reverse infix expression
+    reverse_string(infix);
+    
+    // 2. Tukar '(' dengan ')' dan sebaliknya
+    for (i = 0; infix[i] != '\0'; i++) {
+        if (infix[i] == '(') 
+            reversedInfix[i] = ')';
+        else if (infix[i] == ')') 
+            reversedInfix[i] = '(';
+        else 
+            reversedInfix[i] = infix[i];
+    }
+    reversedInfix[i] = '\0';
+
+    // 3. Konversi infix (dibalik) menjadi postfix
+    for (i = 0; reversedInfix[i] != '\0'; i++) {
+        char symbol = reversedInfix[i];
+
+        if (isOperand(symbol)) {
+            reversedPrefix[j++] = symbol;
+        } else if (symbol == '(') {
+            pushStr("(");
+        } else if (symbol == ')') {
+            while (!isEmpty() && peek() != '(') {
+                reversedPrefix[j++] = popStr()[0];
+            }
+            popStr(); // Pop '('
+        } else {
+            while (!isEmpty() && precedence(peek()) >= precedence(symbol)) {
+                reversedPrefix[j++] = popStr()[0];
+            }
+            snprintf(temp, MAX, "%c", symbol);
+            pushStr(temp);
+        }
+    }
+
+    while (!isEmpty()) {
+        reversedPrefix[j++] = popStr()[0];
+    }
+    reversedPrefix[j] = '\0';
+
+    // 4. Reverse hasil postfix -> jadi prefix
+    reverse_string(reversedPrefix);
+    strcpy(prefix, reversedPrefix);
+
+    printf("Prefix = %s\n", prefix);
+}
+
 void pushStr(char *str) {
     if (top < MAX - 1) {
         top++;
