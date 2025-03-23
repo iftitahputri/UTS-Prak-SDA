@@ -26,16 +26,21 @@ void reverse_string(char *);
 
 int main (){
     int choice;
-    char postfix[MAX], infix[MAX], prefix[MAX], result[MAX];
+    char postfix[MAX];
     
-    printf("Pilih opsi:\n");
-    printf("1. Infix ke Postfix\n");
-    printf("2. Postfix ke Infix\n");
-    printf("3. Postfix ke Prefix\n");
-    printf("4. Prefix ke Postfix\n");
-    printf("5. Infix ke Prefix\n");
-    printf("6. Prefix ke Infix\n");
-    printf("Pilihan: ");
+    printf ("+=========================================+\n");
+    printf("|\t    Choose the Convertion:      \t|\n");
+    printf("|=========================================|");
+    printf("|           1. Infix to Postfix           |\n");
+    printf("|           2. Postfix to Infix           |\n");
+    printf("|           3. Postfix to Prefix          |\n");
+    printf("|           4. Prefix to Postfix          |\n");
+    printf("|           5. Infix to Prefix            |\n");
+    printf("|           6. Prefix to Infix            |\n");
+    printf("|           7. Quit                       |\n");
+    printf ("+=========================================+\n");
+    printf(">> ");
+    
     scanf("%d", &choice);
     getchar(); // Membersihkan buffer newline
 
