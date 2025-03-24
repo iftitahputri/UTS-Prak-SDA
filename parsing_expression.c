@@ -9,7 +9,7 @@ int top = -1;
 
 void inToPost();
 void postToIn();
-char *postToPre(char *);
+void postToPre();
 void preToPost();
 void inToPre();
 void preToIn();
@@ -29,50 +29,46 @@ int main (){
     char postfix[MAX];
 
     while (1){
-    printf ("+=========================================+\n");
-    printf("|\t    Choose the Convertion:      \t|\n");
-    printf("|=========================================|");
-    printf("|           1. Infix to Postfix           |\n");
-    printf("|           2. Postfix to Infix           |\n");
-    printf("|           3. Postfix to Prefix          |\n");
-    printf("|           4. Prefix to Postfix          |\n");
-    printf("|           5. Infix to Prefix            |\n");
-    printf("|           6. Prefix to Infix            |\n");
-    printf("|           7. Quit                       |\n");
-    printf ("+=========================================+\n");
-    printf(">> ");
+        printf ("+=========================================+\n");
+        printf("|\t    Choose the Convertion:        |\n");
+        printf("|=========================================|\n");
+        printf("|           1. Infix to Postfix           |\n");
+        printf("|           2. Postfix to Infix           |\n");
+        printf("|           3. Postfix to Prefix          |\n");
+        printf("|           4. Prefix to Postfix          |\n");
+        printf("|           5. Infix to Prefix            |\n");
+        printf("|           6. Prefix to Infix            |\n");
+        printf("|           7. Quit                       |\n");
+        printf ("+=========================================+\n");
+        printf(">> ");
     
-    scanf("%d", &choice);
-    getchar(); // Membersihkan buffer newline
+        scanf("%d", &choice);
+        getchar(); // Membersihkan buffer newline
 
-    switch (choice){
-    case 1:
-        inToPost();
-        break;
-    case 2:
-        postToIn();
-        break;
-    case 3: 
-        printf("Enter the Postfix Expression: ");
-        fgets(postfix, MAX, stdin);
-        if (postfix[strlen(postfix) - 1] == '\n')
-            postfix[strlen(postfix) - 1] = '\0';
-        printf("Prefix = %s\n", postToPre(postfix));
-        break;
-    case 4:
-        preToPost();
-        break;
-    case 5:
-        inToPre();
-        break;
-    case 6:
-        preToIn();
-        break;
-    case 7:
-        exit(1);
-    default:
-        printf ("Invalid Choice!");
-    }
+        switch (choice){
+        case 1:
+            inToPost();
+            break;
+        case 2:
+            postToIn();
+            break;
+        case 3: 
+            postToPre(postfix);
+            break;
+        case 4:
+            preToPost();
+            break;
+        case 5:
+            inToPre();
+            break;
+        case 6:
+            preToIn();
+            break;
+        case 7:
+            exit(1);
+        default:
+            printf ("Invalid Choice!");
+        }
     }
     return 0;
 }
@@ -117,7 +113,6 @@ void inToPost() {
 void postToIn() {
     char postfix[MAX], symbol, op1[MAX], op2[MAX], temp[MAX];
     int i;
-    top = -1;
     
     printf("Enter the Postfix Expression: ");
     fgets(postfix, MAX, stdin);
@@ -148,14 +143,17 @@ void postToIn() {
     }
 }
 
-char *postToPre(char *post_exp) {
+void postToPre() {
     static char result[MAX];
-    char symbol, op1[MAX], op2[MAX], temp[MAX];
-    int i;
-    top = -1;
+    char symbol, op1[MAX], op2[MAX], temp[MAX], postfix[MAX];
     
-    for (i = 0; i < strlen(post_exp); i++) {
-        symbol = post_exp[i];
+    printf("Enter the Postfix Expression: ");
+    fgets(postfix, MAX, stdin);
+    if (postfix[strlen(postfix) - 1] == '\n')
+        postfix[strlen(postfix) - 1] = '\0';
+
+    for (int i = 0; i < strlen(postfix); i++) {
+        symbol = postfix[i];
         if (isOperand(symbol)) {
             char operand[2] = {symbol, '\0'};
             pushStr(operand);
@@ -171,9 +169,9 @@ char *postToPre(char *post_exp) {
         }
     }
     if (top == 0) {
-        strcpy(result, popStr());
-        return result;
-    } else {
+        strcpy(result, popStr());    
+        printf("Prefix = %s\n", result);
+} else {
         printf("Error: Invalid postfix format!\n");
         exit(1);
     }
@@ -265,8 +263,7 @@ void inToPre() {
 }
 
 void preToIn() {
-    char prefix[MAX], infix[MAX];
-    char temp[MAX];
+    char prefix[MAX], infix[MAX], temp[MAX];
     int i;
 
     printf("Enter the Prefix Expression: ");
@@ -314,7 +311,7 @@ void pushStr(char *str) {
 }
 
 char *popStr() {
-    if (top == -1) {
+    if (isEmpty()) {
         printf("Stack underflow!\n");
         exit(1);
     }
